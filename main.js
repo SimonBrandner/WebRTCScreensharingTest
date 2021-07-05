@@ -8,6 +8,7 @@ const remoteScreensharing = document.getElementById("remoteScreensharing");
 const createOfferButton = document.getElementById("createOfferButton");
 const createAnswerButton = document.getElementById("createAnswerButton");
 const gotAnswerButton = document.getElementById("gotAnswerButton");
+const screensharingButton = document.getElementById("screensharingButton");
 
 const offerOutput = document.getElementById("offerOutput");
 const offerInput = document.getElementById("offerInput");
@@ -26,12 +27,6 @@ const setupMedia = async () => {
 		pc.addTrack(track, localStream);
 	});
 	localVideo.srcObject = localStream;
-
-	const screensharingStream = await navigator.mediaDevices.getDisplayMedia();
-	screensharingStream.getTracks().forEach((track) => {
-		pc.addTrack(track, screensharingStream);
-	});
-	localScreensharing.srcObject = screensharingStream;
 };
 
 const addIceCandidates = async () => {
@@ -49,10 +44,16 @@ pc.onicecandidate = (event) => {
 
 pc.ontrack = (event) => {
 	const stream = event.streams[0];
-	if (!remoteVideo.srcObject || remoteVideo.srcObject.id === stream.id) {
+	if (
+		!remoteVideo.srcObject ||
+		remoteVideo.srcObject.id === stream.id ||
+		(remoteVideo.srcObject && remoteScreensharing.srcObject)
+	) {
+		console.log("Video", stream, remoteVideo.srcObject);
 		remoteVideo.srcObject = stream;
 	}
 	else {
+		console.log("Screensharing", stream, remoteScreensharing.srcObject);
 		remoteScreensharing.srcObject = stream;
 	}
 };
@@ -74,7 +75,9 @@ createAnswerButton.onclick = async () => {
 			sdp: offer
 		})
 	);
-	await setupMedia();
+	if (!localVideo.srcObject) {
+		await setupMedia();
+	}
 
 	const answerDescription = await pc.createAnswer();
 	await pc.setLocalDescription(answerDescription);
@@ -94,4 +97,12 @@ gotAnswerButton.onclick = async () => {
 			sdp: answer
 		})
 	);
+};
+
+screensharingButton.onclick = async () => {
+	const screensharingStream = await navigator.mediaDevices.getDisplayMedia();
+	screensharingStream.getTracks().forEach((track) => {
+		pc.addTrack(track, screensharingStream);
+	});
+	localScreensharing.srcObject = screensharingStream;
 };
