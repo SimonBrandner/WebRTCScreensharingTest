@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+	<div class="videos">
+		<span>
+			<h3>Local Stream</h3>
+			<video id="localVideo" autoplay></video>
+		</span>
+		<span>
+			<h3>Remote Stream</h3>
+			<video id="remoteVideo" autoplay></video>
+		</span>
+		<span>
+			<h3>Local Screensharing</h3>
+			<video id="localScreensharing" autoplay></video>
+		</span>
+		<span>
+			<h3>Remote Screensharing</h3>
+			<video id="remoteScreensharing" autoplay></video>
+		</span>
+	</div>
+
+	<hr>
+
+	<button id="createOfferButton">Create offer</button>
+	<textarea placeholder="offerOutput" readonly id="offerOutput"></textarea>
+
+	<hr>
+
+	<textarea placeholder="offerInput" id="offerInput"></textarea>
+	<button id="createAnswerButton">Create answer</button>
+	<textarea placeholder="answerOutput" readonly id="answerOutput"></textarea>
+
+	<hr>
+
+	<textarea placeholder="answerInput" id="answerInput"></textarea>
+	<button id="gotAnswerButton">Got answer</button>
+
+	<hr>
+
+	<textarea placeholder="candidatesInput" id="candidatesInput"></textarea>
+	<textarea placeholder="candidatesOutput" readonly id="candidatesOutput"></textarea>
+
+	<hr>
+
+	<script type="module" src="/main.js"></script>
+</body>
+
+</html>
